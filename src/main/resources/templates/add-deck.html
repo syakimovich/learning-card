@@ -10,15 +10,16 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-10 col-lg-4">
-            <h1 class="fs-5">Decks</h1>
-            <table class="table">
-                <tbody>
-                <tr th:each="deck: ${decks}">
-                    <td><a th:href="@{/deck/{id}(id=${deck.id})}" th:text="${deck.name}"/></td>
-                </tr>
-                </tbody>
-            </table>
-            <a class="btn btn-primary" th:href="@{/add-deck}">Add new deck</a>
+            <h1 class="fs-5">Add deck</h1>
+            <form name="f" th:action="@{/add-deck}" method="post">
+                <div class="mb-3 mt-3">
+                    <label for="deckname">Deck name</label>
+                    <input type="text" id="deckname" name="deckname"/>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
