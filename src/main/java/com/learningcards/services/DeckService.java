@@ -29,4 +29,10 @@ public class DeckService {
                 .orElseThrow(() -> new UsernameNotFoundException("Username %s not found".formatted(username)));
         deckRepository.save(new Deck(user, deckDTO.getName()));
     }
+
+    public DeckDTO getDeck(long deckId) {
+        Deck deck = deckRepository.findById(deckId)
+                .orElseThrow(() -> new RuntimeException("Deck with id %d not found".formatted(deckId)));
+        return new DeckDTO(deck.getId(), deck.getName());
+    }
 }

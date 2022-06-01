@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+<head>
+    <title th:replace="fragments.html :: title"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+<nav th:replace="fragments.html :: navBar"> </nav>
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-10 col-lg-4">
+            <h1 class="fs-5">Add new card to deck <span th:text="${deckName}"/></h1>
+            <form name="f" th:action="@{/deck/{id}/add-card(id=${deckId})}" method="post">
+                <div class="mb-3 mt-3">
+                    <label for="front">Front</label>
+                    <input type="text" id="front" name="front"/>
+                </div>
+                <div class="mb-3">
+                    <label for="back">Back</label>
+                    <input type="text" id="back" name="back"/>
+                </div>
+                <input type="hidden" id="deckId" name="deckId" th:value="${deckId}"/>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+</body>
+</html>
