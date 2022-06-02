@@ -10,8 +10,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.jdbc.Sql;
 
-import javax.sql.DataSource;
-
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,9 +20,6 @@ class CardLearningStateRepositoryTest {
 
     @Autowired
     private TestEntityManager entityManager;
-
-    @Autowired
-    private DataSource dataSource;
 
     @Autowired
     private CardLearningStateRepository cardLearningStateRepository;
