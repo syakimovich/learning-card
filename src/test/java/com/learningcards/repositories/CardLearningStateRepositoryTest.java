@@ -15,7 +15,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@Sql(statements = "DROP SEQUENCE IF EXISTS HIBERNATE_SEQUENCE; CREATE SEQUENCE HIBERNATE_SEQUENCE START WITH 1 INCREMENT BY 1;")
+@Sql(statements = "CREATE SEQUENCE IF NOT EXISTS HIBERNATE_SEQUENCE START WITH 1 INCREMENT BY 1;")
 class CardLearningStateRepositoryTest {
 
     @Autowired
