@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:tiles="http://www.thymeleaf.org">
+<head>
+    <title th:replace="fragments.html :: title"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+<nav th:replace="fragments.html :: navBar"> </nav>
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-10 col-lg-4">
+            <h1 class="fs-5">Learning new cards in deck <span th:text="${deckName}"/></h1>
+
+            <div class="card mb-3">
+                <div class="card-body">
+                    <small class="text-muted">front</small>
+                    <b th:text="${cardToLearn.front}"/>
+                </div>
+            </div>
+
+            <div id="cardBack" class="card mb-3" style="display: none">
+                <div class="card-body">
+                    <small class="text-muted">back</small>
+                    <b th:text="${cardToLearn.back}"/>
+                </div>
+            </div>
+
+            <div id="showBack" class="mb-3">
+                <button class="btn btn-primary" onclick="showBack()">Show</button>
+            </div>
+            <div>
+                <a th:each="reviewTime: ${reviewTimes}" class="btn btn-primary ml-3" th:href="${'javascript: document.review' + reviewTime.time + '.submit()'}" >Review in <span th:text="${reviewTime.toShow}"></span></a>
+            </div>
+            <div>
+                <form th:each="reviewTime: ${reviewTimes}" th:name="${'review' + reviewTime.time}" th:action="@{/deck/{id}/review(id=${deckId})}" method="post" th:hidden="true">
+                    <input type="hidden" name="timeToReview" th:value="${reviewTime.time}" />
+                    <input type="hidden" name="stage" th:value="${stage}" />
+                    <input type="hidden" name="maxStage"th:value="${maxStage}" />
+                    <input type="hidden" name="cardId" th:value="${cardToLearn.id}" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function showBack() {
+        document.getElementById('cardBack').style.display = '';
+        document.getElementById('showBack').style.display = 'none';
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+</body>
+</html>

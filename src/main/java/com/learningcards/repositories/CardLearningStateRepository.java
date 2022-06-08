@@ -15,10 +15,18 @@ public interface CardLearningStateRepository extends JpaRepository<CardLearningS
     List<CardLearningState> findAllByDeckIdAndUsername(Long deckId, String username);
 
     @Query("select count(cls) from CardLearningState cls where cls.card.deck.id = :deckId " +
-            "and cls.user.username = :username and cls.isInLearning = false")
+            "and cls.user.username = :username and cls.isInLearning = false and cls.isLearned = false")
     int countNewToLearn(Long deckId, String username);
 
     @Query("select cls from CardLearningState cls where cls.card.deck.id = :deckId " +
-            "and cls.user.username = :username and cls.isInLearning = false")
+            "and cls.user.username = :username and cls.isInLearning = false and cls.isLearned = false")
     List<CardLearningState> findNextNewToLearn(Long deckId, String username, Pageable pageable);
+
+    @Query("select count(cls) from CardLearningState cls where cls.card.deck.id = :deckId " +
+            "and cls.user.username = :username and cls.isInLearning = true and cls.isLearned = false and toReview < current_timestamp")
+    int countToReview(Long deckId, String username);
+
+    @Query("select cls from CardLearningState cls where cls.card.deck.id = :deckId " +
+            "and cls.user.username = :username and cls.isInLearning = true and cls.isLearned = false and toReview < current_timestamp")
+    List<CardLearningState> findNextToReview(Long deckId, String username, Pageable pageable);
 }

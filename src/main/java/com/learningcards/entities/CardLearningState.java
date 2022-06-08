@@ -19,15 +19,18 @@ public class CardLearningState {
 
     private boolean isInLearning;
 
-    private Timestamp toRepeat;
+    private boolean isLearned;
+
+    private Timestamp toReview;
 
     public CardLearningState() {
     }
 
-    public CardLearningState(Card card, User user, boolean isInLearning) {
+    public CardLearningState(Card card, User user, boolean isInLearning, boolean isLearned) {
         this.card = card;
         this.user = user;
         this.isInLearning = isInLearning;
+        this.isLearned = isLearned;
     }
 
     public Long getId() {
@@ -50,11 +53,19 @@ public class CardLearningState {
         isInLearning = inLearning;
     }
 
-    public Timestamp getToRepeat() {
-        return toRepeat;
+    public boolean isLearned() {
+        return isLearned;
     }
 
-    public void setToRepeat(Timestamp toRepeat) {
-        this.toRepeat = toRepeat;
+    public void setLearned(boolean learned) {
+        isLearned = learned;
+    }
+
+    public Timestamp getToReview() {
+        return toReview;
+    }
+
+    public void setToReview(Timestamp toReview) {
+        this.toReview = toReview;
     }
 }

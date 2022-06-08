@@ -2,6 +2,7 @@ package com.learningcards.controllers;
 
 import com.learningcards.dto.CardDTO;
 import com.learningcards.dto.DeckDTO;
+import com.learningcards.dto.ReviewTimeDTO;
 import com.learningcards.services.DeckService;
 import com.learningcards.services.LearningService;
 import org.springframework.stereotype.Controller;
@@ -18,7 +19,12 @@ import java.util.Optional;
 public class LearningController {
 
     public static final int LEARN_NEW_LIMIT = 3;
+    public static final int REVIEW_LIMIT = 3;
     public static final long MILLISEC_TO_REPEAT_NEW = 60 * 1000;
+    public static final ReviewTimeDTO[] REVIEW_TIMES = {
+            new ReviewTimeDTO(10 * 60 * 1000, "10 minutes"),
+            new ReviewTimeDTO(24 * 60 * 60 * 1000, "1 day"),
+            new ReviewTimeDTO(7 * 24 * 60 * 60 * 1000, "1 week")};
 
     private LearningService learningService;
     private DeckService deckService;
@@ -69,5 +75,49 @@ public class LearningController {
         model.addAttribute( "stage", stage + 1);
         model.addAttribute( "maxStage", maxStage);
         return "learn-new";
+    }
+
+    @GetMapping("/deck/{deckId}/review")
+    public String review(@PathVariable("deckId") Long deckId, Model model, Principal principal) {
+        int numCards = learningService.getNumberOfCardsToReview(deckId, principal.getName());
+        if (numCards < 1) {
+            return "redirect:/deck/" + deckId;
+        }
+        Optional<CardDTO> cardOptional = learningService.getNextCardToReview(deckId, principal.getName());
+        if (cardOptional.isEmpty()) {
+            return "redirect:/deck/" + deckId;
+        }
+        CardDTO card = cardOptional.get();
+        DeckDTO deck = deckService.getDeck(deckId);
+
+        model.addAttribute("deckName", deck.getName());
+        model.addAttribute( "cardToLearn", card);
+        model.addAttribute( "stage", 0);
+        model.addAttribute( "maxStage", Math.min(numCards, REVIEW_LIMIT));
+        model.addAttribute( "reviewTimes", REVIEW_TIMES);
+        return "review";
+    }
+
+    @PostMapping("/deck/{deckId}/review")
+    public String processReview(@PathVariable("deckId") Long deckId, @RequestParam("stage") int stage,
+                                @RequestParam("maxStage") int maxStage, @RequestParam("cardId") Long cardId,
+                                @RequestParam("timeToReview") long timeToReview, Model model, Principal principal) {
+        learningService.saveLearningResult(principal.getName(), cardId, System.currentTimeMillis() + timeToReview);
+        if (stage + 1 >= maxStage) {
+            return "redirect:/deck/" + deckId;
+        }
+        Optional<CardDTO> cardOptional = learningService.getNextCardToReview(deckId, principal.getName());
+        if (cardOptional.isEmpty()) {
+            return "redirect:/deck/" + deckId;
+        }
+        CardDTO card = cardOptional.get();
+        DeckDTO deck = deckService.getDeck(deckId);
+
+        model.addAttribute("deckName", deck.getName());
+        model.addAttribute( "cardToLearn", card);
+        model.addAttribute( "stage", stage + 1);
+        model.addAttribute( "maxStage", maxStage);
+        model.addAttribute( "reviewTimes", REVIEW_TIMES);
+        return "review";
     }
 }

@@ -42,7 +42,7 @@ public class LearningService {
         }
         for (Card card : cards) {
             if (!cardStatesAlreadyExist.contains(card.getId())) {
-                learningStateRepository.save(new CardLearningState(card, user, false));
+                learningStateRepository.save(new CardLearningState(card, user, false, false));
             }
         }
     }
@@ -50,7 +50,7 @@ public class LearningService {
     public void saveLearningResult(String username, long cardId, long timeToReview) {
         CardLearningState learningState = learningStateRepository.findByUsernameAndCardId(username, cardId);
         learningState.setInLearning(true);
-        learningState.setToRepeat(new Timestamp(timeToReview));
+        learningState.setToReview(new Timestamp(timeToReview));
         learningStateRepository.save(learningState);
     }
 
@@ -66,5 +66,19 @@ public class LearningService {
 
     public int getNumberOfNewCardsToLearn(long deckId, String username) {
         return learningStateRepository.countNewToLearn(deckId, username);
+    }
+
+    public Optional<CardDTO> getNextCardToReview(long deckId, String username) {
+        List<CardLearningState> toLearn = learningStateRepository.findNextToReview(deckId, username,
+                PageRequest.of(0, 1, Sort.by("toReview").ascending()));
+        if (toLearn.size() < 1) {
+            return Optional.empty();
+        }
+        Card card = toLearn.get(0).getCard();
+        return Optional.of(new CardDTO(card.getId(), card.getFront(), card.getBack()));
+    }
+
+    public int getNumberOfCardsToReview(long deckId, String username) {
+        return learningStateRepository.countToReview(deckId, username);
     }
 }

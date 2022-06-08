@@ -29,7 +29,7 @@ class CardLearningStateRepositoryTest {
         User user = new User("user1", "pass1", "USER", true);
         Deck deck = new Deck(user, "deck1");
         Card card = new Card(deck, "front1", "back1");
-        CardLearningState learningState = new CardLearningState(card, user, true);
+        CardLearningState learningState = new CardLearningState(card, user, true, false);
         entityManager.persist(user);
         entityManager.persist(deck);
         entityManager.persist(card);
@@ -51,8 +51,8 @@ class CardLearningStateRepositoryTest {
         Deck deck = new Deck(user, "deck1");
         Card card1 = new Card(deck, "front1", "back1");
         Card card2 = new Card(deck, "front2", "back2");
-        CardLearningState learningState1 = new CardLearningState(card1, user, true);
-        CardLearningState learningState2 = new CardLearningState(card2, user, true);
+        CardLearningState learningState1 = new CardLearningState(card1, user, true, false);
+        CardLearningState learningState2 = new CardLearningState(card2, user, true, false);
         entityManager.persist(user);
         entityManager.persist(deck);
         entityManager.persist(card1);
