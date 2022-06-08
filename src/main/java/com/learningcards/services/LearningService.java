@@ -90,4 +90,11 @@ public class LearningService {
     public int getNumberOfCardsToReview(long deckId, String username) {
         return learningStateRepository.countToReview(deckId, username);
     }
+
+    public List<CardDTO> getCardsWithLearningState(long deckId, String username) {
+        return learningStateRepository.findAllByDeckIdAndUsername(deckId, username).stream()
+                .map(ls -> new CardDTO(ls.getCard().getId(), ls.getCard().getFront(),
+                        ls.getCard().getBack(), ls.getToReview() == null ? "" : ls.getToReview().toString(),
+                        ls.isInLearning() ? "learning" : ls.isLearned() ? "learned" : "not started")).toList();
+    }
 }

@@ -29,7 +29,7 @@ public class DeckController {
 
     @GetMapping("/deck/{deckId}")
     public String viewDeck(@PathVariable Long deckId, Model model, Principal principal) {
-        List<CardDTO> cardsDTO = cardService.findDeckCards(deckId);
+        List<CardDTO> cardsDTO = learningService.getCardsWithLearningState(deckId, principal.getName());
         DeckDTO deck = deckService.getDeck(deckId);
         int newToLearn = learningService.getNumberOfNewCardsToLearn(deckId, principal.getName());
         int newToLearnNow = Math.min(newToLearn, LearningService.LEARN_NEW_LIMIT);
