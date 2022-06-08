@@ -27,8 +27,8 @@
             </table>
             <div class="mb-3">
                 <a class="btn btn-primary" th:href="@{/deck/{id}/add-card(id=${deckId})}">Add new card</a>
-                <a class="btn btn-primary" th:href="@{/deck/{id}/learn-new(id=${deckId})}">Learn new</a>
-                <a class="btn btn-primary" th:href="@{/deck/{id}/review(id=${deckId})}">Review</a>
+                <a class="btn btn-primary" th:href="@{/deck/{id}/learn-new(id=${deckId})}">Learn new <span th:text="${newToLearnNow + ' (' + newToLearn + ')'}"></span></a>
+                <a class="btn btn-primary" th:href="@{/deck/{id}/review(id=${deckId})}">Review <span th:text="${toReviewNow + ' (' + toReview + ')'}"></span></a>
             </div>
             <div>
                 <a class="btn" th:href="@{/home}">Back to decks list</a>

@@ -1,6 +1,7 @@
 package com.learningcards.services;
 
 import com.learningcards.dto.CardDTO;
+import com.learningcards.dto.ReviewTimeDTO;
 import com.learningcards.entities.Card;
 import com.learningcards.entities.CardLearningState;
 import com.learningcards.entities.User;
@@ -20,6 +21,14 @@ import java.util.Set;
 
 @Service
 public class LearningService {
+
+    public static final int LEARN_NEW_LIMIT = 3;
+    public static final int REVIEW_LIMIT = 3;
+    public static final long MILLISEC_TO_REPEAT_NEW = 60 * 1000;
+    public static final ReviewTimeDTO[] REVIEW_TIMES = {
+            new ReviewTimeDTO(10 * 60 * 1000, "10 minutes"),
+            new ReviewTimeDTO(24 * 60 * 60 * 1000, "1 day"),
+            new ReviewTimeDTO(7 * 24 * 60 * 60 * 1000, "1 week")};
 
     CardLearningStateRepository learningStateRepository;
     CardRepository cardRepository;

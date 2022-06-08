@@ -63,7 +63,7 @@ class LearningControllerTest {
                 .andExpect(MockMvcResultMatchers.view().name("learn-new"))
                 .andExpect(MockMvcResultMatchers.model().attribute("deckName", deck.getName()))
                 .andExpect(MockMvcResultMatchers.model().attribute("stage", 0))
-                .andExpect(MockMvcResultMatchers.model().attribute("maxStage", LearningController.LEARN_NEW_LIMIT));
+                .andExpect(MockMvcResultMatchers.model().attribute("maxStage", LearningService.LEARN_NEW_LIMIT));
 
         verify(learningService).addLearningStatesToCards(deckId, username);
     }

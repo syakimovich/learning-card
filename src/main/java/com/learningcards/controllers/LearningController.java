@@ -18,14 +18,6 @@ import java.util.Optional;
 @Controller
 public class LearningController {
 
-    public static final int LEARN_NEW_LIMIT = 3;
-    public static final int REVIEW_LIMIT = 3;
-    public static final long MILLISEC_TO_REPEAT_NEW = 60 * 1000;
-    public static final ReviewTimeDTO[] REVIEW_TIMES = {
-            new ReviewTimeDTO(10 * 60 * 1000, "10 minutes"),
-            new ReviewTimeDTO(24 * 60 * 60 * 1000, "1 day"),
-            new ReviewTimeDTO(7 * 24 * 60 * 60 * 1000, "1 week")};
-
     private LearningService learningService;
     private DeckService deckService;
 
@@ -51,7 +43,7 @@ public class LearningController {
         model.addAttribute("deckName", deck.getName());
         model.addAttribute( "cardToLearn", card);
         model.addAttribute( "stage", 0);
-        model.addAttribute( "maxStage", Math.min(numCards, LEARN_NEW_LIMIT));
+        model.addAttribute( "maxStage", Math.min(numCards, LearningService.LEARN_NEW_LIMIT));
         return "learn-new";
     }
 
@@ -59,7 +51,7 @@ public class LearningController {
     public String processLearnNew(@PathVariable("deckId") Long deckId, @RequestParam("stage") int stage,
                            @RequestParam("maxStage") int maxStage, @RequestParam("cardId") Long cardId,
                            Model model, Principal principal) {
-        learningService.saveLearningResult(principal.getName(), cardId, System.currentTimeMillis() + MILLISEC_TO_REPEAT_NEW);
+        learningService.saveLearningResult(principal.getName(), cardId, System.currentTimeMillis() + LearningService.MILLISEC_TO_REPEAT_NEW);
         if (stage + 1 >= maxStage) {
             return "redirect:/deck/" + deckId;
         }
@@ -93,8 +85,8 @@ public class LearningController {
         model.addAttribute("deckName", deck.getName());
         model.addAttribute( "cardToLearn", card);
         model.addAttribute( "stage", 0);
-        model.addAttribute( "maxStage", Math.min(numCards, REVIEW_LIMIT));
-        model.addAttribute( "reviewTimes", REVIEW_TIMES);
+        model.addAttribute( "maxStage", Math.min(numCards, LearningService.REVIEW_LIMIT));
+        model.addAttribute( "reviewTimes", LearningService.REVIEW_TIMES);
         return "review";
     }
 
@@ -117,7 +109,7 @@ public class LearningController {
         model.addAttribute( "cardToLearn", card);
         model.addAttribute( "stage", stage + 1);
         model.addAttribute( "maxStage", maxStage);
-        model.addAttribute( "reviewTimes", REVIEW_TIMES);
+        model.addAttribute( "reviewTimes", LearningService.REVIEW_TIMES);
         return "review";
     }
 }
